@@ -16,7 +16,7 @@ class TransactionController extends Controller
             ->join('canteens', 'products.canteen_id', '=', 'canteens.id')
             ->select('transactions.*', 'products.name as product_name', 'canteens.name as canteen_name')
             ->orderBy('transactions.created_at', 'desc')
-            ->get();
+            ->paginate(10);
         return view('transactions.index', compact('transacts'));
     }
 
@@ -71,6 +71,38 @@ class TransactionController extends Controller
 
         // Redirect kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Transaction deleted successfully');
+    }
+
+    public function history()
+    {
+        // Ambil data transaksi berdasarkan user_id
+        $transacts = DB::table('transactions')
+            ->join('products', 'transactions.product_id', '=', 'products.id')
+            ->join('canteens', 'products.canteen_id', '=', 'canteens.id')
+            ->select('transactions.*', 'products.name as product_name', 'canteens.name as canteen_name')
+            ->where('user_id', auth()->id())
+            ->orderBy('transactions.created_at', 'desc')
+            ->paginate(10);
+
+        // Tampilkan view history.pembeli dengan data transacts
+        return view('pembeli.history', compact('transacts'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validasi input
+        $validate = $request->validate([
+            'status' => 'required|in:diproses,dibatalkan,selesai'
+        ]);
+
+        // Update status transaksi berdasarkan id
+        DB::table('transactions')->where('id', $id)->update([
+            'status' => $validate['status'],
+            'updated_at' => now(),
+        ]);
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Transaction updated successfully');
     }
 
 }

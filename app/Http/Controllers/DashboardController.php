@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Products;
+use App\Models\Transactions;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +16,11 @@ class DashboardController extends Controller
         $role = Auth::user()->role;
 
         if ($role == 'admin') {
-            return view('admin.dashboard');
+            $cu = User::where('role', 'pemilik')->count();
+            $cp = Products::count();
+            $ct = Transactions::count();
+            $latestTransactions = Transactions::orderBy('created_at', 'desc')->paginate(5);
+            return view('admin.dashboard', compact('cu', 'cp', 'ct', 'latestTransactions'));
         } elseif ($role == 'pemilik') {
             // Fetch the canteen owned by the authenticated user
             $canteen = DB::table('canteens')->where('owner_id', Auth::id())->first();

@@ -16,7 +16,6 @@ class Products extends Model
         return $this->belongsTo(Canteens::class);
     }
 
-
     public function transactions()
     {
         return $this->hasMany(Transactions::class, 'product_id', 'id');

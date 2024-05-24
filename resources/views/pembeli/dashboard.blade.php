@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <h5 class="card-title">History Pembelian</h5>
                     <p class="card-text">Lihat pembelian yang telah kamu lakukan</p>
-                    <a href="#" class="btn btn-primary">Lihat</a>
+                    <a href="{{ route('history.pembeli') }}" class="btn btn-primary">Lihat</a>
                 </div>
             </div>
         </div>

@@ -21,13 +21,46 @@ class CanteenController extends Controller
         return view('canteen.create', compact('owners'));
     }
 
+    public function create_owner()
+    {
+        return view('canteen.create-admin');
+    }
+
+    public function create_owner_store(Request $request)
+    {
+        // dd($request->all());
+        // Validasi request
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8, confirmed',
+            'role' => 'required, in:pemilik',
+        ]);
+
+        // Buat user baru
+        User::create($validated);
+
+        return redirect()->back()->with('success', 'Owner created successfully');
+    }
+
     public function store(Request $request)
     {
+        // dd($request->all());
         $validate = $request->validate([
             'name' => 'required',
             'description' => 'required',
             'owner_id' => 'required',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'unique_code' => 'required|unique:canteens',
         ]);
+
+        if ($request->hasFile('thumbnail')) {
+            $thumbnail = $request->file('thumbnail');
+            $thumbnail_name = time() . '.' . $thumbnail->getClientOriginalExtension();
+            $thumbnail->move(public_path('storage/thumbnail'), $thumbnail_name);
+
+            $validate['thumbnail'] = $thumbnail_name;
+        }
 
         Canteens::create($validate);
 

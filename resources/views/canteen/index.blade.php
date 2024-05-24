@@ -10,16 +10,20 @@
             <div class="card border-0">
                 <div class="card-body">
                     @if (Auth::user()->role == 'admin')
-                        <a href="{{ route('canteens.create') }}" class="btn btn-primary mb-3">
-                            <i class="bx bx-plus"></i> Tambah Kantin
+                        <a href="{{ route('canteens.create-admin.view') }}" class="btn btn-primary mb-3 d-block col-md-2">
+                            <i class="bx bx-plus"></i> Tambah Pemilik
                         </a>
                         @if (session('success'))
                             <div class="alert alert-success">{{ session('success') }}</div>
                         @endif
+                        <div class="alert alert-info d-inline-block" style="font-size: 13px">
+                            <i class="bi bi-info-circle"></i>
+                            Anda hanya dapat menambahkan pemilik kantin.
+                        </div>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-striped table-bordered text-center">
                                 <thead>
-                                    <tr>
+                                    <tr class="align-middle">
                                         <th>No.</th>
                                         <th>Nama Kantin</th>
                                         <th>Deskripsi</th>
@@ -35,13 +39,13 @@
                                             <td>{{ $canteen->description }}</td>
                                             <td>{{ $canteen->owner->name }}</td>
                                             <td>
-                                                <div class="d-flex gap-2 align-items-center">
-                                                    <form action="{{ route('canteens.destroy', $canteen->id) }}"
+                                                <div class="d-flex gap-2 justify-content-center align-items-center">
+                                                    <form action="{{ route('canteen.hapus', $canteen->id) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-light">
-                                                            <i class="bx bx-trash"></i> Hapus
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            <i class="bx bx-trash"></i>
                                                         </button>
                                                     </form>
                                                 </div>

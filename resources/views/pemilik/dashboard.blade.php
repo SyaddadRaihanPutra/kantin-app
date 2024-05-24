@@ -68,7 +68,8 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                                                    <form action="{{ route('products.store') }}" method="POST"
+                                                        enctype="multipart/form-data">
                                                         @csrf
                                                         <input type="hidden" name="canteen_id"
                                                             value="{{ \DB::table('canteens')->where('owner_id', Auth::user()->id)->first()->id }}">
@@ -106,10 +107,11 @@
                                         </div>
                                     @endif
                                     <div class="table-responsive">
-                                        <table class="table text-nowrap">
+                                        <table class="table text-nowrap text-center">
                                             <thead>
-                                                <tr>
+                                                <tr class="align-middle">
                                                     <th>No.</th>
+                                                    <th>Gambar</th>
                                                     <th>Nama Produk</th>
                                                     <th>Deskripsi</th>
                                                     <th>Harga</th>
@@ -120,11 +122,21 @@
                                                 @foreach ($products as $product)
                                                     <tr valign="middle">
                                                         <td>{{ $loop->iteration }}</td>
+                                                        <td>
+                                                            <div class="position-relative"
+                                                                style="width: 100%; padding-top: 100%;">
+                                                                <img src="{{ asset('storage/product/' . $product->product) }}"
+                                                                    class="card-img-top position-absolute top-0 start-0 w-100 h-100 shadow-sm"
+                                                                    alt="{{ $product->name }} Img"
+                                                                    style="object-fit: contain;">
+                                                            </div>
+                                                        </td>
                                                         <td>{{ $product->name }}</td>
                                                         <td>{{ $product->description }}</td>
                                                         <td>Rp. {{ number_format($product->price, 2, ',', '.') }}</td>
                                                         <td>
-                                                            <button type="button" class="btn btn-primary btn-sm rounded-5"
+                                                            <button type="button"
+                                                                class="btn btn-primary btn-sm rounded-5"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#exampleModal{{ $product->id }}">
                                                                 <i class="bi bi-pencil-square"></i> </button>
@@ -145,7 +157,8 @@
                                                                         <div class="modal-body">
                                                                             <form
                                                                                 action="{{ route('products.update', $product->id) }}"
-                                                                                method="POST" enctype="multipart/form-data">
+                                                                                method="POST"
+                                                                                enctype="multipart/form-data">
                                                                                 @csrf
                                                                                 @method('PUT')
                                                                                 <input type="hidden" name="canteen_id"
@@ -156,8 +169,7 @@
                                                                                         produk</label>
                                                                                     <input type="file"
                                                                                         class="form-control"
-                                                                                        id="product"
-                                                                                        name="product"
+                                                                                        id="product" name="product"
                                                                                         required>
                                                                                 </div>
                                                                                 <div class="mb-3">
@@ -217,7 +229,7 @@
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit"
-                                                                    class="btn btn-danger btn-sm rounded-5">Hapus</button>
+                                                                    class="btn btn-danger btn-sm rounded-5"><i class="bi bi-trash"></i></button>
                                                             </form>
                                                         </td>
                                                     </tr>
@@ -240,7 +252,11 @@
                 </div>
                 <div class="card border-0">
                     <div class="card-body">
-                        <form action="{{ route('canteens.store') }}" method="POST">
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-info-circle"></i> &nbsp; <strong>Info!</strong> &nbsp; <br> <br>
+                            <p>Anda belum memiliki kantin, silahkan buat kantin anda sekarang</p>
+                        </div>
+                        <form action="{{ route('canteens.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="owner_id" value="{{ Auth::user()->id }}">
                             <input type="hidden" name="unique_code" value="{{ Str::random(10) }}">
@@ -251,6 +267,10 @@
                             <div class="mb-3">
                                 <label for="description" class="form-label">Deskripsi Kantin</label>
                                 <textarea class="form-control" id="description" name="description" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="thumbnail" class="form-label">Foto Kantin</label>
+                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Tambah Kantin</button>
                         </form>

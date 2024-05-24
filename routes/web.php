@@ -32,6 +32,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/canteens/all', [CanteenController::class, 'index'])->name('canteen.all');
+    Route::get('/owner/admin/create', [CanteenController::class, 'create_owner'])->name('canteens.create-admin.view');
+    Route::post('/owner/admin/create', [CanteenController::class, 'create_owner_store'])->name('canteens.create-admin');
+    Route::get('/canteens/{id}/edit', [CanteenController::class, 'edit'])->name('canteen.edit');
+    Route::delete('/canteens/{id}/delete', [CanteenController::class, 'destroy'])->name('canteen.hapus');
     Route::get('/users', [AuthController::class, 'index'])->name('users.index');
     Route::delete('/users/{id}', [AuthController::class, 'destroy'])->name('users.destroy');
 });
@@ -49,13 +54,13 @@ Route::middleware(['auth', 'isOwner'])->group(function () {
 
     Route::get('/{unique_code}/pengaturan', [CanteenController::class, 'pengaturan'])->name('settings.canteen');
     Route::put('/{unique_code}/pengaturan', [CanteenController::class, 'pengaturan_update'])->name('settings.update');
+    Route::put('/transactions/{id}/update', [TransactionController::class, 'update'])->name('transactions.update');
 });
 
 Route::middleware(['auth', 'isPembeli'])->group(function () {
     Route::get('/canteens', [CanteenController::class, 'index'])->name('canteens.index');
     Route::get('/canteens/{unique_code}', [CanteenController::class, 'show'])->name('canteens.show');
-
     Route::post('/orders/store', [TransactionController::class, 'order'])->name('orders.store');
-
     Route::post('/transactions/store', [TransactionController::class, 'store'])->name('transactions.store');
+    Route::get('/history', [TransactionController::class, 'history'])->name('history.pembeli');
 });
