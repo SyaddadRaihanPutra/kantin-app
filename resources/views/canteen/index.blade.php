@@ -5,7 +5,10 @@
     <section class="py-5">
         <div class="container">
             <div class="mb-4">
-                <h4 class="text-dark fw-semibold">Daftar Kantin</h4>
+                <h4 class="text-dark fw-semibold">
+                    <i class="bi bi-shop"></i>
+                    Daftar Kantin
+                </h4>
             </div>
             <div class="card border-0">
                 <div class="card-body">
@@ -59,12 +62,13 @@
                         <div class="row d-flex justify-content-center align-items-center gap-5">
                             @foreach ($canteens as $canteen)
                                 <div class="card p-3 mb-3 col-md-3 shadow-lg rounded-4">
-                                    <img src="{{ asset('storage/thumbnail/' . $canteen->thumbnail) }}" class="card-img-top"
-                                        alt="{{ $canteen->name }} Img">
+                                    <div class="d-flex align-items-center justify-content-center" style="height: 200px; overflow: hidden;">
+                                        <img src="{{ asset('storage/thumbnail/' . $canteen->thumbnail) }}" class="card-img-top img-fluid" alt="{{ $canteen->name }} Img" style="object-fit: cover; height: 100%; width: 100%;">
+                                    </div>
                                     <div class="my-3">
                                         <h5 class="card-title fw-bold"><i class="bi bi-shop"></i> {{ $canteen->name }}</h5>
                                         <p class="card-text">
-                                            {{ $canteen->description }}
+                                            {{ Str::limit($canteen->description, 20) }}
                                         </p>
                                     </div>
                                     <div class="row d-flex justify-content-center gap-2">
@@ -100,7 +104,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             @endforeach

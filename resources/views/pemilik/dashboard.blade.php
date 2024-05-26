@@ -17,7 +17,7 @@
                                 </h4>
                                 <p class="text-white">Total pemasukan pada kantin anda</p>
                             </div>
-                            <h1 class="text-white">Rp. {{ number_format($totalIncome, 2, ',', '.') }},-</h1>
+                            <h1 class="text-white">Rp. {{ number_format($totalIncome, 0, ',', '.') }},-</h1>
                         </div>
                     </div>
                     <div class="card col-12 col-md-5 border border-3 border-secondary rounded-5">
@@ -45,7 +45,6 @@
                                 <div class="card border-0">
                                     <div class="row mb-3">
                                         <div class="col-12 d-flex justify-content-between align-items-center">
-                                            <h4 class="bg-white border-0 mb-0">Produk yang anda jual</h4>
                                             <button type="button" class="btn btn-primary btn-sm d-none d-md-block"
                                                 data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                 Tambah Produk
@@ -58,6 +57,7 @@
                                             </button>
                                         </div>
                                     </div>
+                                    <h5 class="bg-white border-0 mb-3">Produk yang dijual</h5>
                                     <div class="modal fade" id="exampleModal" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -107,7 +107,7 @@
                                         </div>
                                     @endif
                                     <div class="table-responsive">
-                                        <table class="table text-nowrap text-center">
+                                        <table class="table text-nowrap text-center table-striped table-bordered">
                                             <thead>
                                                 <tr class="align-middle">
                                                     <th>No.</th>
@@ -142,7 +142,7 @@
                                                                 <i class="bi bi-pencil-square"></i> </button>
                                                             <div class="modal fade" id="exampleModal{{ $product->id }}"
                                                                 tabindex="-1" aria-labelledby="exampleModalLabel"
-                                                                aria-hidden="true">
+                                                                aria-hidden="true" style="text-align: left!important">
                                                                 <div class="modal-dialog">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">

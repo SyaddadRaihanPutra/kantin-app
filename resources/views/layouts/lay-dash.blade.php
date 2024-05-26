@@ -29,7 +29,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ route('dashboard') }}">Dashboard</a>
+                            <a class="nav-link" aria-current="page" href="{{ route('dashboard') }}">Beranda</a>
                         </li>
                         @if (Auth::user()->role == 'pemilik')
                             @php
@@ -48,6 +48,9 @@
                                 <a class="nav-link" href="{{ route('canteen.all') }}">Kantin</a>
                             </li>
                         @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('canteens.index') }}">List Kantin</a>
+                            </li>
                         @endif
                     </ul>
                     <ul class="navbar-nav">
@@ -102,6 +105,13 @@
                             <span class="small d-block">Kantin</span>
                         </a>
                     </li>
+                @else
+                    <li class="nav-item d-flex justify-content-center align-items-center">
+                        <a href="{{ route('history.pembeli') }}" class="nav-link text-center">
+                            <i class="bi bi-arrow-clockwise"></i>
+                            <span class="small d-block">History</span>
+                        </a>
+                    </li>
                 @endif
                 <li class="nav-item dropup d-flex justify-content-center align-items-center">
                     <a href="#" class="nav-link text-center" role="button" data-bs-toggle="dropdown"
@@ -127,12 +137,7 @@
         </nav>
 
         <!-- For larger screens -->
-        <div class="mt-lg-5 pt-lg-5 mb-sm-5 pb-sm-5 d-none d-sm-block">
-            @yield('content')
-        </div>
-
-        <!-- For mobile screens -->
-        <div class="mb-5 pb-5 d-block d-sm-none">
+        <div class="mt-lg-5 pt-lg-5 mb-sm-5 pb-sm-5">
             @yield('content')
         </div>
     </div>
