@@ -64,3 +64,5 @@ Route::middleware(['auth', 'isPembeli'])->group(function () {
     Route::post('/transactions/store', [TransactionController::class, 'store'])->name('transactions.store');
     Route::get('/history', [TransactionController::class, 'history'])->name('history.pembeli');
 });
+
+Route::get('/order/{id}', [TransactionController::class, 'share'])->name('order.share');

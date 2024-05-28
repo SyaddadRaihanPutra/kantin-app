@@ -88,6 +88,20 @@ class TransactionController extends Controller
         return view('pembeli.history', compact('transacts'));
     }
 
+    public function share($id)
+    {
+        // Ambil data transaksi berdasarkan id
+        $transact = DB::table('transactions')
+            ->join('products', 'transactions.product_id', '=', 'products.id')
+            ->join('canteens', 'products.canteen_id', '=', 'canteens.id')
+            ->select('transactions.*', 'products.name as product_name', 'canteens.name as canteen_name')
+            ->where('transactions.id', $id)
+            ->first();
+
+        // Tampilkan view order.share dengan data transact
+        return view('orders.share', compact('transact'));
+    }
+
     public function update(Request $request, $id)
     {
         // Validasi input

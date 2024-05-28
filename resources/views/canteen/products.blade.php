@@ -117,12 +117,25 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="window.print();">Print
-                                            Invoice</button>
-                                    </div>
+                                    @if (session('success'))
+                                        <div class="modal-footer">
+                                            <a href="{{ route('order.share', session('id')) }}"
+                                                class="btn btn-outline-dark btn-sm"><i class="bi bi-share"></i>
+                                                &nbsp;Bagikan</a>
+                                            <button type="button" class="btn btn-primary" onclick="savePrint()"><i
+                                                    class="bi bi-printer"></i>
+                                                &nbsp;Simpan</button>
+                                            <script>
+                                                function savePrint() {
+                                                    const printWindow = window.open("{{ route('order.share', session('id')) }}", "_blank");
+                                                    printWindow.addEventListener('load', function() {
+                                                        printWindow.print();
+                                                        printWindow.close();
+                                                    }, true);
+                                                }
+                                            </script>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -144,7 +157,7 @@
                                 </div>
                             @else
                                 @foreach ($products as $product)
-                                    <div class="card p-4 mb-3 col-12 col-sm-6 col-md-4 col-lg-3 shadow-lg rounded-4">
+                                    <div class="card p-4 mb-3 col-12 col-sm-12 col-md-6 col-lg-3 shadow-lg rounded-4">
                                         <img src="{{ asset('storage/product/' . $product->product) }}" class="card-img-top"
                                             alt="{{ $product->name }} Img"
                                             style="object-fit: contain; width: 100%; height: 150px;">
@@ -156,7 +169,8 @@
                                         </div>
                                         <hr>
                                         <div class="row d-flex justify-content-center gap-2">
-                                            <form action="{{ route('orders.store') }}" method="POST" class="w-100">
+                                            <form action="{{ route('orders.store') }}" method="POST" class="w-100"
+                                                id="myForm">
                                                 @csrf
                                                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -178,8 +192,24 @@
                                                             id="button-increment-{{ $loop->index }}">+</button>
                                                     </div>
                                                 </div>
-                                                <button type="submit"
-                                                    class="btn btn-primary btn-block w-100 d-block d-md-inline mt-2 mt-md-0">Pesan</button>
+                                                <button type="submit" onclick="confirmSubmit();" id="submit"
+                                                    class="btn btn-primary rounded-5 btn-block w-100 d-block d-md-inline mt-2 mt-md-0">Pesan</button>
+
+                                                <script>
+                                                    function confirmSubmit() {
+                                                        if (confirm("Apakah Anda yakin ingin mengirim pesan?")) {
+                                                            var btn = document.querySelector("submit");
+                                                            btn.disabled = true;
+
+                                                            setTimeout(function() {
+                                                                btn.disabled = false;
+                                                            }, 5000); // Nonaktifkan selama 5 detik (5000 milidetik)
+
+                                                            document.getElementById("myForm").submit();
+                                                        }
+                                                    }
+                                                </script>
+
                                             </form>
                                         </div>
                                     </div>
