@@ -57,8 +57,10 @@
                             <h5 class="card-title"
                                 style="font-size: 1.25rem; font-weight: 600; color: #000; margin-bottom: 1.25rem;">
                                 Transaksi Terbaru</h5>
+                            <div id="chart"></div>
                             <div class="table-responsive">
-                                <table class="table table-hover text-center pe-auto text-nowrap">
+                                <table
+                                    class="table table-hover text-center pe-auto text-nowrap table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th scope="col">No</th>
@@ -78,14 +80,58 @@
                                                 <td>{{ $lt->product->canteen->name }}</td>
                                                 <td>{{ $lt->user->name }}</td>
                                                 <td>{{ $lt->quantity }} pcs</td>
-                                                <td>Rp. {{ number_format($lt->total_price * $lt->quantity, 0, ',', '.') }}</td>
+                                                <td>Rp. {{ number_format($lt->total_price, 0, ',', '.') }}
+                                                </td>
                                                 <td>{{ $lt->created_at->format('d M Y H:i') }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                                 {{ $latestTransactions->links() }}
+                                <p><i><small>Show {{ $latestTransactions->count() }} of {{ $latestTransactions->total() }} transactions.</small></i></p>
                             </div>
+                            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+                            @php
+                                $products = [];
+                                $canteens = [];
+                                $buyers = [];
+                                $quantities = [];
+                                $totals = [];
+                                $dates = [];
+
+                                foreach ($latestTransactions as $lt) {
+                                    $products[] = $lt->product->name;
+                                    $canteens[] = $lt->product->canteen->name;
+                                    $buyers[] = $lt->user->name;
+                                    $quantities[] = $lt->quantity;
+                                    $totals[] = $lt->total_price;
+                                    $dates[] = $lt->created_at->format('d M Y H:i');
+                                }
+                            @endphp
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    var options = {
+                                        chart: {
+                                            type: 'bar',
+                                            height: 350
+                                        },
+                                        series: [{
+                                            name: 'Total',
+                                            data: @json($totals)
+                                        }],
+                                        xaxis: {
+                                            categories: @json($dates)
+                                        },
+                                        yaxis: {
+                                            title: {
+                                                text: 'Total (Rp)'
+                                            }
+                                        },
+                                    };
+                                    var chart = new ApexCharts(document.querySelector("#chart"), options);
+                                    chart.render();
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>

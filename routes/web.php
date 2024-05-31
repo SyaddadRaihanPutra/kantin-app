@@ -20,25 +20,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::redirect('/', '/login'); // Mengarahkan ke halaman login
+
+Auth::routes(); // Mengatur route login, register
+
+Route::middleware(['auth'])->group(function () { // Middleware auth
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard'); // Halaman dashboard
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); // Logout
 });
 
-Auth::routes();
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-});
-
-Route::middleware(['auth', 'isAdmin'])->group(function () {
+Route::middleware(['auth', 'isAdmin'])->group(function () { // Middleware auth dan isAdmin
     Route::get('/canteens/all', [CanteenController::class, 'index'])->name('canteen.all');
-    Route::get('/owner/admin/create', [CanteenController::class, 'create_owner'])->name('canteens.create-admin.view');
-    Route::post('/owner/admin/create', [CanteenController::class, 'create_owner_store'])->name('canteens.create-admin');
     Route::get('/canteens/{id}/edit', [CanteenController::class, 'edit'])->name('canteen.edit');
     Route::delete('/canteens/{id}/delete', [CanteenController::class, 'destroy'])->name('canteen.hapus');
-    Route::get('/users', [AuthController::class, 'index'])->name('users.index');
-    Route::delete('/users/{id}', [AuthController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/owner/admin/create', [CanteenController::class, 'create_owner'])->name('canteens.create-admin.view');
+    Route::post('/owner/admin/create', [CanteenController::class, 'create_owner_store'])->name('canteens.create-admin');
 });
 
 Route::middleware(['auth', 'isOwner'])->group(function () {

@@ -59,7 +59,7 @@
                                 <input type="password" name="password_confirmation" class="form-control"
                                     placeholder="******" required>
                             </div>
-                            <button class="btn btn-primary d-block w-100" type="submit">Masuk</button>
+                            <button class="btn btn-primary d-block w-100" type="submit">Daftar</button>
                         </form>
                         <p class="pt-4 text-center">Sudah punya akun? <a href="{{ route('login') }}">Masuk</a></p>
                     </div>
