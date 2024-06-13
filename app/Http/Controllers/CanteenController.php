@@ -29,12 +29,11 @@ class CanteenController extends Controller
     public function create_owner_store(Request $request)
     {
         // dd($request->all());
-        // Validasi request
         $validated = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8, confirmed',
-            'role' => 'required, in:pemilik',
+            'role' => 'required',
         ]);
 
         // Buat user baru
